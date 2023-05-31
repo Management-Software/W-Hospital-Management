@@ -1,147 +1,79 @@
-<?php
-    session_start();
-    include('includes/dbconn.php');
-    if(isset($_POST['login']))
-    {
-    $email=$_POST['email'];
-    $password=$_POST['password'];
-    $password = md5($password);
-    $stmt=$mysqli->prepare("SELECT email,password,id FROM userregistration WHERE email=? and password=? ");
-        $stmt->bind_param('ss',$email,$password);
-        $stmt->execute();
-        $stmt -> bind_result($email,$password,$id);
-        $rs=$stmt->fetch();
-         $stmt->close();
-        $_SESSION['id']=$id;
-        $_SESSION['login']=$email;
-        $uip=$_SERVER['REMOTE_ADDR'];
-        $ldate=date('d/m/Y h:i:s', time());
-         if($rs){
-            $uid=$_SESSION['id'];
-            $uemail=$_SESSION['login'];
-        $ip=$_SERVER['REMOTE_ADDR'];
-        $geopluginURL='http://www.geoplugin.net/php.gp?ip='.$ip;
-        $addrDetailsArr = unserialize(file_get_contents($geopluginURL));
-        $city = $addrDetailsArr['geoplugin_city'];
-        $country = $addrDetailsArr['geoplugin_countryName'];
-        $log="insert into userLog(userId,userEmail,userIp,city,country) values('$uid','$uemail','$ip','$city','$country')";
-        $mysqli->query($log);
-        if($log){
-            header("location:student/dashboard.php");
-                 }
-        } else {
-            echo "<script>alert('Sorry, Invalid Username/Email or Password!');</script>";
-               }
-   }
-?>
-<!-- By CodeAstro - codeastro.com -->
 <!DOCTYPE html>
-<html dir="ltr">
-
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon.png">
-    <title>Hostel Management System</title>
-    <!-- Custom CSS -->
-    <link href="dist/css/style.min.css" rel="stylesheet">
+    <!-- Required Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <script type="text/javascript">
-    function valid() {
-    if(document.registration.password.value!= document.registration.cpassword.value){
-        alert("Password and Re-Type Password Field do not match  !!");
-    document.registration.cpassword.focus();
-    return false;
-        }
-    return true;
-        }
-    </script>
+    <!-- Page Title -->
+    <title>Hospital Management System</title>
 
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/logo/favicon.png" type="image/x-icon">
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="assets/css/animate-3.7.0.css">
+    <link rel="stylesheet" href="assets/css/font-awesome-4.7.0.min.css">
+    <link rel="stylesheet" href="assets/css/bootstrap-4.1.3.min.css">
+    <link rel="stylesheet" href="assets/css/owl-carousel.min.css">
+    <link rel="stylesheet" href="assets/css/jquery.datetimepicker.min.css">
+    <link rel="stylesheet" href="assets/css/linearicons.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
-
-<!-- By CodeAstro - codeastro.com -->
-
 <body>
-    <div class="main-wrapper">
-        <!-- ============================================================== -->
-        <!-- Preloader - style you can find in spinners.css -->
-        <!-- ============================================================== -->
-        <div class="preloader">
-            <div class="lds-ripple">
-                <div class="lds-pos"></div>
-                <div class="lds-pos"></div>
-            </div>
-        </div>
-        <!-- ============================================================== -->
-        <!-- Preloader - style you can find in spinners.css -->
-        <!-- ============================================================== -->
-        <!-- By CodeAstro - codeastro.com -->
-        <!-- ============================================================== -->
-        <!-- Login box.scss -->
-        <!-- ============================================================== -->
-        <div class="auth-wrapper d-flex no-block justify-content-center align-items-center position-relative"
-            style="background:url(../assets/images/big/auth-bg.jpg) no-repeat center center;">
-            <div class="auth-box row">
-                <div class="col-lg-7 col-md-5 modal-bg-img" style="background-image: url(assets/images/hostel-img.jpg);">
-                </div>
-                <div class="col-lg-5 col-md-7 bg-white">
-                    <div class="p-3">
-                        <div class="text-center">
-                            <img src="assets/images/big/icon.png" alt="wrapkit">
-                        </div>
-                        <h2 class="mt-3 text-center">Student Login</h2>
-                        
-                        <form class="mt-4" method="POST">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label class="text-dark" for="uname">Email</label>
-                                        <input class="form-control" name="email" id="uname" type="email"
-                                            placeholder="Enter your email" required>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label class="text-dark" for="pwd">Password</label>
-                                        <input class="form-control" name="password" id="pwd" type="password"
-                                            placeholder="Enter your password" required>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12 text-center">
-                                    <button type="submit" name="login" class="btn btn-block btn-dark">LOGIN</button>
-                                </div>
-                                <div class="col-lg-12 text-center mt-5">
-                                   <a href="admin/index.php" class="text-danger">Go to Admin Panel</a>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- By CodeAstro - codeastro.com -->
-        <!-- ============================================================== -->
-        <!-- Login box.scss -->
-        <!-- ============================================================== -->
+    <!-- Preloader Starts -->
+    <div class="preloader">
+        <div class="spinner"></div>
     </div>
-    <!-- ============================================================== -->
-    <!-- All Required js -->
-    <!-- ============================================================== -->
-    <script src="assets/libs/jquery/dist/jquery.min.js "></script>
-    <!-- Bootstrap tether Core JavaScript -->
-    <script src="assets/libs/popper.js/dist/umd/popper.min.js "></script>
-    <script src="assets/libs/bootstrap/dist/js/bootstrap.min.js "></script>
-    <!-- ============================================================== -->
-    <!-- This page plugin js -->
-    <!-- ============================================================== -->
-    <script>
-        $(".preloader ").fadeOut();
-    </script>
-</body>
+    <!-- Preloader End -->
 
+    <!-- Header Area Starts -->
+    <header class="header-area">
+        <div id="header" id="home">
+            <div class="container">
+                <div class="row align-items-center justify-content-between d-flex">
+                <div id="logo">
+                    <a href="index.php"></a>
+                </div>
+                <nav id="nav-menu-container">
+                    <ul class="nav-menu">
+                        <li class="menu-active"><a href="index.php">Home</a></li>
+                        <li><a href="backend/doc/index.php">Doctor's Login</a></li>
+                        <li><a href="backend/admin/index.php">Administrator Login</a></li>
+                    </ul>
+                </nav><!-- #nav-menu-container -->		    		
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Header Area End -->
+
+    <!-- Banner Area Starts -->
+    <section class="banner-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h4>Caring for better life</h4>
+                    <h1>Leading the way in medical excellence</h1>
+                    <p>HMS is awarded as one of the Top Hospital Management System, which can integrate all the HIS systems, processes and machines into an intelligent information system to derive operational efficiency and assist hospitals in decision making process through MIS and Analytics.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   
+
+
+    <!-- Javascript -->
+    <script src="assets/js/vendor/jquery-2.2.4.min.js"></script>
+	<script src="assets/js/vendor/bootstrap-4.1.3.min.js"></script>
+    <script src="assets/js/vendor/wow.min.js"></script>
+    <script src="assets/js/vendor/owl-carousel.min.js"></script>
+    <script src="assets/js/vendor/jquery.datetimepicker.full.min.js"></script>
+    <script src="assets/js/vendor/jquery.nice-select.min.js"></script>
+    <script src="assets/js/vendor/superfish.min.js"></script>
+    <script src="assets/js/main.js"></script>
+
+</body>
 </html>
